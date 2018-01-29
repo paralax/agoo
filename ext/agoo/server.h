@@ -5,11 +5,7 @@
 
 #include <pthread.h>
 #include <stdbool.h>
-#ifdef IS_WINDOWS
-#include <atomic.h>
-#else
 #include <stdatomic.h>
-#endif
 
 #include <ruby.h>
 

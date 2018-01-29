@@ -3,11 +3,7 @@
 #ifndef __AGOO_RES_H__
 #define __AGOO_RES_H__
 
-#ifdef IS_WINDOWS
-#include <atomic.h>
-#else
 #include <stdatomic.h>
-#endif
 #include <stdbool.h>
 
 #include <ruby.h>
