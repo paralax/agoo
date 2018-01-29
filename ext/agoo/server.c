@@ -15,7 +15,6 @@
 #include <sys/socket.h>
 #include <sys/time.h>
 #include <unistd.h>
-#include <stdatomic.h>
 
 #include <ruby.h>
 #include <ruby/thread.h>

@@ -3,7 +3,11 @@
 #ifndef __AGOO_TEXT_H__
 #define __AGOO_TEXT_H__
 
+#ifdef IS_WINDOWS
+#include <atomic.h>
+#else
 #include <stdatomic.h>
+#endif
 #include <stdbool.h>
 
 #define TEXT_MIN_SIZE	8

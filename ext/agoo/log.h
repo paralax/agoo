@@ -6,7 +6,11 @@
 #include <netdb.h>
 #include <pthread.h>
 #include <stdarg.h>
+#ifdef IS_WINDOWS
+#include <atomic.h>
+#else
 #include <stdatomic.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
