@@ -6,7 +6,7 @@
 #endif
 #include <string.h>
 
-#include "con.h"
+#include "conn.h"
 #include "dtime.h"
 #include "hook.h"
 #include "http.h"

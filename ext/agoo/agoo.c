@@ -1,6 +1,5 @@
 // Copyright (c) 2018, Peter Ohler, All rights reserved.
 
-#include <stdio.h>
 #include <ruby.h>
 
 #include "error_stream.h"
