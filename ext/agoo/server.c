@@ -115,14 +115,14 @@ configure(Err err, Server s, int port, const char *root, VALUE options) {
     s->listen_thread = 0;
     s->con_thread = 0;
     s->log.cats = NULL;
-    log_cat_reg(&s->log, &s->error_cat, "ERROR",    ERROR, RED, true);
-    log_cat_reg(&s->log, &s->warn_cat,  "WARN",     WARN,  YELLOW, true);
-    log_cat_reg(&s->log, &s->info_cat,  "INFO",     INFO,  GREEN, false);
-    log_cat_reg(&s->log, &s->debug_cat, "DEBUG",    DEBUG, GRAY, false);
-    log_cat_reg(&s->log, &s->con_cat,   "connect",  INFO,  GREEN, false);
-    log_cat_reg(&s->log, &s->req_cat,   "request",  INFO,  CYAN, false);
-    log_cat_reg(&s->log, &s->resp_cat,  "response", INFO,  DARK_CYAN, false);
-    log_cat_reg(&s->log, &s->eval_cat,  "eval",     INFO,  BLUE, false);
+    log_cat_reg(&s->log, &s->error_cat, "ERROR",    LOG_ERROR, RED, true);
+    log_cat_reg(&s->log, &s->warn_cat,  "WARN",     LOG_WARN,  YELLOW, true);
+    log_cat_reg(&s->log, &s->info_cat,  "INFO",     LOG_INFO,  GREEN, false);
+    log_cat_reg(&s->log, &s->debug_cat, "DEBUG",    LOG_DEBUG, GRAY, false);
+    log_cat_reg(&s->log, &s->con_cat,   "connect",  LOG_INFO,  GREEN, false);
+    log_cat_reg(&s->log, &s->req_cat,   "request",  LOG_INFO,  CYAN, false);
+    log_cat_reg(&s->log, &s->resp_cat,  "response", LOG_INFO,  DARK_CYAN, false);
+    log_cat_reg(&s->log, &s->eval_cat,  "eval",     LOG_INFO,  BLUE, false);
 
     if (ERR_OK != log_init(err, &s->log, options)) {
 	return err->code;

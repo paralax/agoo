@@ -15,12 +15,12 @@
 #include "err.h"
 
 typedef enum {
-    FATAL	= 0,
-    ERROR	= 1,
-    WARN	= 2,
-    INFO	= 3,
-    DEBUG	= 4,
-    UNKNOWN	= 5,
+    LOG_FATAL	= 0,
+    LOG_ERROR	= 1,
+    LOG_WARN	= 2,
+    LOG_INFO	= 3,
+    LOG_DEBUG	= 4,
+    LOG_UNKNOWN	= 5,
 } LogLevel;
 
 typedef struct _Color {
