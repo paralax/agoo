@@ -1,5 +1,6 @@
 // Copyright 2018 by Peter Ohler, All Rights Reserved
 
+#include <ruby.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
