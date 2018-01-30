@@ -3,11 +3,11 @@
 #ifndef __AGOO_RESPONSE_H__
 #define __AGOO_RESPONSE_H__
 
-#include <stdatomic.h>
 #include <stdbool.h>
 
 #include <ruby.h>
 
+#include "atomic.h"
 #include "server.h"
 #include "text.h"
 

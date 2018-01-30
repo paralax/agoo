@@ -35,11 +35,11 @@ queue_multi_init(Queue q, size_t qsize, bool multi_push, bool multi_pop) {
     q->end = q->q + qsize;
 
     memset(q->q, 0, sizeof(QItem) * qsize);
-    q->head = q->q;
-    q->tail = q->q + 1;
+    atomic_init(&q->head, q->q);
+    atomic_init(&q->tail, q->q + 1);
     atomic_flag_clear(&q->push_lock);
     atomic_flag_clear(&q->pop_lock);
-    q->wait_state = 0;
+    atomic_init(&q->wait_state, 0);
     q->multi_push = multi_push;
     q->multi_pop = multi_pop;
     // Create when/if needed.
@@ -70,11 +70,11 @@ queue_push(Queue q, QItem item) {
 	}
     }
     // Wait for head to move on.
-    while (atomic_load(&q->head) == q->tail) {
+    while (atomic_load(&q->head) == (tail = (QItem*)atomic_load(&q->tail))) {
 	dsleep(RETRY_SECS);
     }
-    *q->tail = item;
-    tail = q->tail + 1;
+    *tail = item;
+    tail += 1;
 
     if (q->end <= tail) {
 	tail = q->q;
@@ -83,7 +83,7 @@ queue_push(Queue q, QItem item) {
     if (q->multi_push) {
 	atomic_flag_clear(&q->push_lock);
     }
-    if (0 != q->wsock && WAITING == atomic_load(&q->wait_state)) {
+    if (0 != q->wsock && WAITING == (int)atomic_load(&q->wait_state)) {
 	if (write(q->wsock, ".", 1)) {}
 	atomic_store(&q->wait_state, NOTIFIED);
     }
@@ -99,6 +99,7 @@ queue_wakeup(Queue q) {
 QItem
 queue_pop(Queue q, double timeout) {
     QItem	item;
+    QItem	*head;
     QItem	*next;
     
     if (q->multi_pop) {
@@ -106,16 +107,17 @@ queue_pop(Queue q, double timeout) {
 	    dsleep(RETRY_SECS);
 	}
     }
-    item = *q->head;
+    head = (QItem*)atomic_load(&q->head);
+    item = *head;
 
     if (NULL != item) {
-	*q->head = NULL;
+	*head = NULL;
 	if (q->multi_pop) {
 	    atomic_flag_clear(&q->pop_lock);
 	}
 	return item;
     }
-    next = q->head + 1;
+    next = head + 1;
 
     if (q->end <= next) {
 	next = q->q;
@@ -132,8 +134,9 @@ queue_pop(Queue q, double timeout) {
     }
     atomic_store(&q->head, next);
 
-    item = *q->head;
-    *q->head = NULL;
+    head = (QItem*)atomic_load(&q->head);
+    item = *head;
+    *head = NULL;
     if (q->multi_pop) {
 	atomic_flag_clear(&q->pop_lock);
     }
@@ -143,13 +146,13 @@ queue_pop(Queue q, double timeout) {
 // Called by the popper usually.
 bool
 queue_empty(Queue q) {
-    QItem	*head = atomic_load(&q->head);
+    QItem	*head = (QItem*)atomic_load(&q->head);
     QItem	*next = head + 1;
 
     if (q->end <= next) {
 	next = q->q;
     }
-    if (NULL == *head && q->tail == next) {
+    if (NULL == *head && (QItem*)atomic_load(&q->tail) == next) {
 	return true;
     }
     return false;
@@ -186,6 +189,6 @@ int
 queue_count(Queue q) {
     int	size = (int)(q->end - q->q);
     
-    return (q->tail - q->head + size) % size;
+    return ((QItem*)atomic_load(&q->tail) - (QItem*)atomic_load(&q->head) + size) % size;
 }
 

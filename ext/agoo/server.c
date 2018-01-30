@@ -111,7 +111,7 @@ configure(Err err, Server s, int port, const char *root, VALUE options) {
     s->port = port;
     s->root = strdup(root);
     s->thread_cnt = 1;
-    s->running = 0;
+    atomic_init(&s->running, 0);
     s->listen_thread = 0;
     s->con_thread = 0;
     s->log.cats = NULL;

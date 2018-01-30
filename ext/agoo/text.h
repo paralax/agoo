@@ -3,8 +3,9 @@
 #ifndef __AGOO_TEXT_H__
 #define __AGOO_TEXT_H__
 
-#include <stdatomic.h>
 #include <stdbool.h>
+
+#include "atomic.h"
 
 #define TEXT_MIN_SIZE	8
 

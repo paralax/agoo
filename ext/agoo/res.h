@@ -3,11 +3,11 @@
 #ifndef __AGOO_RES_H__
 #define __AGOO_RES_H__
 
-#include <stdatomic.h>
 #include <stdbool.h>
 
 #include <ruby.h>
 
+#include "atomic.h"
 #include "text.h"
 
 typedef struct _Res {
@@ -22,7 +22,7 @@ extern void	res_set_message(Res res, Text t);
 
 static inline Text
 res_message(Res res) {
-    return atomic_load(&res->message);
+    return (Text)atomic_load(&res->message);
 }
 
 #endif // __AGOO_RES_H__

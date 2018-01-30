@@ -58,13 +58,13 @@ find_color(const char *name) {
 
 static bool
 log_queue_empty(Log log) {
-    LogEntry	head = atomic_load(&log->head);
+    LogEntry	head = (LogEntry)atomic_load(&log->head);
     LogEntry	next = head + 1;
 
     if (log->end <= next) {
 	next = log->q;
     }
-    if (!head->ready && log->tail == next) {
+    if (!head->ready && atomic_load(&log->tail) == next) {
 	return true;
     }
     return false;
@@ -72,13 +72,13 @@ log_queue_empty(Log log) {
 
 static LogEntry
 log_queue_pop(Log log, double timeout) {
-    LogEntry	e = log->head;
+    LogEntry	e = (LogEntry)atomic_load(&log->head);
     LogEntry	next;
 
     if (e->ready) {
 	return e;
     }
-    next = log->head + 1;
+    next = (LogEntry)atomic_load(&log->head) + 1;
     if (log->end <= next) {
 	next = log->q;
     }
@@ -92,7 +92,7 @@ log_queue_pop(Log log, double timeout) {
     }
     atomic_store(&log->head, next);
 
-    return log->head;
+    return (LogEntry)atomic_load(&log->head);
 }
 
 
@@ -367,10 +367,10 @@ log_init(Err err, Log log, VALUE cfg) {
     log->end = log->q + qsize;
 
     memset(log->q, 0, sizeof(struct _LogEntry) * qsize);
-    log->head = log->q;
-    log->tail = log->q + 1;
+    atomic_init(&log->head, log->q);
+    atomic_init(&log->tail, log->q + 1);
     atomic_flag_clear(&log->push_lock);
-    log->wait_state = NOT_WAITING;
+    atomic_init(&log->wait_state, NOT_WAITING);
     // Create when/if needed.
     log->rsock = 0;
     log->wsock = 0;
@@ -456,12 +456,12 @@ log_catv(LogCat cat, const char *fmt, va_list ap) {
 	    dsleep(RETRY_SECS);
 	}
 	// Wait for head to move on.
-	while (atomic_load(&log->head) == log->tail) {
+	while (atomic_load(&log->head) == atomic_load(&log->tail)) {
 	    dsleep(RETRY_SECS);
 	}
 	// TBD fill in the entry at tail
 	clock_gettime(CLOCK_REALTIME, &ts);
-	e = log->tail;
+	e = (LogEntry)atomic_load(&log->tail);
 	e->cat = cat;
 	e->when = (int64_t)ts.tv_sec * 1000000000LL + (int64_t)ts.tv_nsec;
 	e->whatp = NULL;
@@ -472,7 +472,7 @@ log_catv(LogCat cat, const char *fmt, va_list ap) {
 		vsnprintf(e->whatp, cnt + 1, fmt, ap2);
 	    }
 	}
-	tail = log->tail + 1;
+	tail = (LogEntry)atomic_load(&log->tail) + 1;
 	if (log->end <= tail) {
 	    tail = log->q;
 	}
@@ -480,7 +480,7 @@ log_catv(LogCat cat, const char *fmt, va_list ap) {
 	atomic_flag_clear(&log->push_lock);
 	va_end(ap2);
 
-	if (0 != log->wsock && WAITING == atomic_load(&log->wait_state)) {
+	if (0 != log->wsock && WAITING == (int)atomic_load(&log->wait_state)) {
 	    if (write(log->wsock, ".", 1)) {}
 	    atomic_store(&log->wait_state, NOTIFIED);
 	}

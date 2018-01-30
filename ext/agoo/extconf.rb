@@ -9,6 +9,7 @@ RbConfig::MAKEFILE_CONFIG['CC'] = "gcc-6" if 'x86_64-linux' == RUBY_PLATFORM
 
 is_windows = RbConfig::CONFIG['host_os'] =~ /(mingw|mswin)/
 $CPPFLAGS += " -DIS_WINDOWS" if RbConfig::CONFIG['host_os'] =~ /(mingw|mswin)/
+$CPPFLAGS += " -DHAS_STDATOMIC=#{RbConfig::CONFIG['host_os'] =~ /(mingw|mswin)/ ? '0' : '1'}"
 
 create_makefile(File.join(extension_name, extension_name))
 

@@ -5,7 +5,9 @@
 
 - todo
 
- - if travis is ok then merge to master
+ - atomic.h
+  - implement psuedo atomic with mutex
+
  - opo benchmarks on big
  - update news on opo
  

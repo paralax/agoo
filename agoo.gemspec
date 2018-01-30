@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email = "peter@ohler.com"
   s.homepage = "http://www.ohler.com/agoo"
   s.summary = "An HTTP server"
-  s.description = "A fast HTTP server supporting rack."
+  s.description = "A high performance HTTP server supporting the Ruby rack API."
   s.licenses = ['MIT']
   s.required_ruby_version = ">= 2.0"
 

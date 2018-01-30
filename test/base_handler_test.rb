@@ -67,7 +67,8 @@ class BaseHandlerTest < Minitest::Test
       server.handle(:GET, "/wild/all/**", WildHandler.new('all'))
       server.start()
 
-      #sleep(100)
+      #sleep(100) # uncomment for a quick was to benchmark
+
       eval_test
       post_test
       put_test
