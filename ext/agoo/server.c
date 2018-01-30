@@ -3,7 +3,9 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <limits.h>
+#ifndef IS_WINDOWS
 #include <netdb.h>
+#endif
 #include <netinet/tcp.h>
 #include <poll.h>
 #include <signal.h>
