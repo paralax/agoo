@@ -1,6 +1,7 @@
 // Copyright (c) 2018, Peter Ohler, All rights reserved.
 
 #include "error_stream.h"
+#include "server.h"
 #include "text.h"
 
 static VALUE	es_class = Qundef;

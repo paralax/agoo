@@ -3,10 +3,7 @@
 #ifndef __AGOO_REQUEST_H__
 #define __AGOO_REQUEST_H__
 
-#include <ruby.h>
-
 #include "hook.h"
-#include "types.h"
 
 struct _Res;
 struct _Server;

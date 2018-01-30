@@ -5,9 +5,9 @@
 
 #include <ruby.h>
 
-#include "server.h"
+struct _Server;
 
 extern void	error_stream_init(VALUE mod);
-extern VALUE	error_stream_new(Server server);
+extern VALUE	error_stream_new(struct _Server *server);
 
 #endif // __AGOO_ERROR_STREAM_H__

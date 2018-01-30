@@ -8,12 +8,12 @@
 #include <stdint.h>
 
 #include "err.h"
-#include "server.h"
 
 #define MAX_HEADER_SIZE	8192
 
 struct _Req;
 struct _Res;
+struct _Server;
 
 typedef struct _Con {
     int			sock;
@@ -28,7 +28,7 @@ typedef struct _Con {
 
     ssize_t		wcnt;  // how much has been written
 
-    Server		server;
+    struct _Server	*server;
     double		timeout;
     bool		closing;
     struct _Req		*req;
@@ -36,7 +36,7 @@ typedef struct _Con {
     struct _Res		*res_tail;
 } *Con;
 
-extern Con		con_create(Err err, Server server, int sock, uint64_t id);
+extern Con		con_create(Err err, struct _Server *server, int sock, uint64_t id);
 extern void		con_destroy(Con c);
 extern const char*	con_header_value(const char *header, int hlen, const char *key, int *vlen);
 
