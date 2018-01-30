@@ -78,6 +78,7 @@ static LogEntry
 log_queue_pop(Log log, double timeout) {
     LogEntry	e = (LogEntry)atomic_load(&log->head);
     LogEntry	next;
+    int		cnt;
 
     if (e->ready) {
 	return e;
@@ -87,7 +88,7 @@ log_queue_pop(Log log, double timeout) {
 	next = log->q;
     }
     // If the next is the tail then wait for something to be appended.
-    for (int cnt = (int)(timeout / RETRY_SECS); atomic_load(&log->tail) == next; cnt--) {
+    for (cnt = (int)(timeout / RETRY_SECS); atomic_load(&log->tail) == next; cnt--) {
 	// TBD poll would be better
 	if (cnt <= 0) {
 	    return NULL;
@@ -187,12 +188,13 @@ static int
 rotate(Err err, Log log) {
     char	from[1024];
     char	to[1024];
-
+    int		seq;
+    
     if (NULL != log->file) {
 	fclose(log->file);
 	log->file = NULL;
     }
-    for (int seq = log->max_files; 0 < seq; seq--) {
+    for (seq = log->max_files; 0 < seq; seq--) {
 	snprintf(to, sizeof(to), log_format, log->dir, seq + 1);
 	snprintf(from, sizeof(from), log_format, log->dir, seq);
 	rename(from, to);
