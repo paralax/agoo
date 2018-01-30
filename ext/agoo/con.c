@@ -413,6 +413,7 @@ con_loop(void *x) {
     int			i;
     long		mcnt = 0;
     double		now;
+    bool		has_con_fd = true;
     
     atomic_fetch_add(&server->running, 1);
     memset(ca, 0, sizeof(ca));
@@ -424,10 +425,13 @@ con_loop(void *x) {
 	    ccnt++;
 	}
 	pp = pa;
-	pp->fd = queue_listen(&server->con_queue);
-	pp->events = POLLIN;
-	pp->revents = 0;
-	pp++;
+	has_con_fd = false;
+	if (0 < (pp->fd = queue_listen(&server->con_queue))) {
+	    pp->events = POLLIN;
+	    pp->revents = 0;
+	    pp++;
+	    has_con_fd = true;
+	}
 	for (i = ccnt, cp = ca; 0 < i && cp < end; cp++) {
 	    if (NULL == *cp) {
 		continue;
@@ -458,7 +462,7 @@ con_loop(void *x) {
 	    // TBD check for cons to close
 	    continue;
 	}
-	if (0 != (pa->revents & POLLIN)) {
+	if (has_con_fd && 0 != (pa->revents & POLLIN)) {
 	    queue_release(&server->con_queue);
 	    while (NULL != (c = (Con)queue_pop(&server->con_queue, 0.0))) {
 		mcnt++;
