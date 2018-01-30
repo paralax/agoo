@@ -8,11 +8,12 @@
 #include <stdint.h>
 
 #include "err.h"
-#include "request.h"
 #include "response.h"
 #include "server.h"
 
 #define MAX_HEADER_SIZE	8192
+
+struct _Req;
 
 typedef struct _Con {
     int			sock;
@@ -30,7 +31,7 @@ typedef struct _Con {
     Server		server;
     double		timeout;
     bool		closing;
-    Req			req;
+    struct _Req		*req;
     Res			res_head;
     Res			res_tail;
 
