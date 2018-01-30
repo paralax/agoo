@@ -811,28 +811,28 @@ static VALUE
 handle(VALUE self, VALUE method, VALUE pattern, VALUE handler) {
     Server	server = (Server)DATA_PTR(self);
     Hook	hook;
-    Method	meth = ALL;
+    Method	meth = HTTP_ALL;
     const char	*pat;
 
     rb_check_type(pattern, T_STRING);
     pat = StringValuePtr(pattern);
 
     if (connect_sym == method) {
-	meth = CONNECT;
+	meth = HTTP_CONNECT;
     } else if (delete_sym == method) {
-	meth = DELETE;
+	meth = HTTP_DELETE;
     } else if (get_sym == method) {
-	meth = GET;
+	meth = HTTP_GET;
     } else if (head_sym == method) {
-	meth = HEAD;
+	meth = HTTP_HEAD;
     } else if (options_sym == method) {
-	meth = OPTIONS;
+	meth = HTTP_OPTIONS;
     } else if (post_sym == method) {
-	meth = POST;
+	meth = HTTP_POST;
     } else if (put_sym == method) {
-	meth = PUT;
+	meth = HTTP_PUT;
     } else if (Qnil == method) {
-	meth = ALL;
+	meth = HTTP_ALL;
     } else {
 	rb_raise(rb_eArgError, "invalid method");
     }

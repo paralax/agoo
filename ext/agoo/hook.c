@@ -44,7 +44,7 @@ bool
 hook_match(Hook hook, Method method, const char *path, const char *pend) {
     const char	*pat = hook->pattern;
 
-    if (method != hook->method && ALL != hook->method) {
+    if (method != hook->method && HTTP_ALL != hook->method) {
 	return false;
     }
     for (; '\0' != *pat && path < pend; pat++) {

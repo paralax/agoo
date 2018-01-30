@@ -1,6 +1,9 @@
 // Copyright (c) 2018, Peter Ohler, All rights reserved.
 
 #include <ctype.h>
+#ifndef IS_WINDOWS
+#include <netdb.h>
+#endif
 #include <string.h>
 
 #include "con.h"
@@ -147,7 +150,7 @@ con_header_read(Con c) {
 	if (3 != b - c->buf || 0 != strncmp("GET", c->buf, 3)) {
 	    return bad_request(c, 400, __LINE__);
 	}
-	method = GET;
+	method = HTTP_GET;
 	break;
     case 'P': {
 	const char	*v;
@@ -155,9 +158,9 @@ con_header_read(Con c) {
 	char		*vend;
 	
 	if (3 == b - c->buf && 0 == strncmp("PUT", c->buf, 3)) {
-	    method = PUT;
+	    method = HTTP_PUT;
 	} else if (4 == b - c->buf && 0 == strncmp("POST", c->buf, 4)) {
-	    method = POST;
+	    method = HTTP_POST;
 	} else {
 	    return bad_request(c, 400, __LINE__);
 	}
@@ -174,25 +177,25 @@ con_header_read(Con c) {
 	if (6 != b - c->buf || 0 != strncmp("DELETE", c->buf, 6)) {
 	    return bad_request(c, 400, __LINE__);
 	}
-	method = DELETE;
+	method = HTTP_DELETE;
 	break;
     case 'H':
 	if (4 != b - c->buf || 0 != strncmp("HEAD", c->buf, 4)) {
 	    return bad_request(c, 400, __LINE__);
 	}
-	method = HEAD;
+	method = HTTP_HEAD;
 	break;
     case 'O':
 	if (7 != b - c->buf || 0 != strncmp("OPTIONS", c->buf, 7)) {
 	    return bad_request(c, 400, __LINE__);
 	}
-	method = OPTIONS;
+	method = HTTP_OPTIONS;
 	break;
     case 'C':
 	if (7 != b - c->buf || 0 != strncmp("CONNECT", c->buf, 7)) {
 	    return bad_request(c, 400, __LINE__);
 	}
-	method = CONNECT;
+	method = HTTP_CONNECT;
 	break;
     default:
 	return bad_request(c, 400, __LINE__);
@@ -223,7 +226,7 @@ con_header_read(Con c) {
 	qend = b;
     }
     if (NULL == (hook = hook_find(server->hooks, method, path, pend))) {
-	if (GET == method) {
+	if (HTTP_GET == method) {
 	    struct _Err	err = ERR_INIT;
 	    Page	p = page_get(&err, &server->pages, server->root, path, (int)(pend - path));
 	    Res		res;

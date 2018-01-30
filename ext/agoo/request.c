@@ -50,13 +50,13 @@ req_method(Req r) {
 	rb_raise(rb_eArgError, "Request is no longer valid.");
     }
     switch (r->method) {
-    case CONNECT:	m = connect_val;	break;
-    case DELETE:	m = delete_val;		break;
-    case GET:		m = get_val;		break;
-    case HEAD:		m = head_val;		break;
-    case OPTIONS:	m = options_val;	break;
-    case POST:		m = post_val;		break;
-    case PUT:		m = put_val;		break;
+    case HTTP_CONNECT:	m = connect_val;	break;
+    case HTTP_DELETE:	m = delete_val;		break;
+    case HTTP_GET:	m = get_val;		break;
+    case HTTP_HEAD:	m = head_val;		break;
+    case HTTP_OPTIONS:	m = options_val;	break;
+    case HTTP_POST:	m = post_val;		break;
+    case HTTP_PUT:	m = put_val;		break;
     default:		m = Qnil;		break;
     }
     return m;

@@ -57,7 +57,7 @@ atomic_fetch_add(Atom a, int delta) {
     int	before;
     
     pthread_mutex_lock(&a->lock);
-    before = (int)a->value;
+    before = (int)(long)a->value;
     a->value = (void*)(long)(before + delta);
     pthread_mutex_unlock(&a->lock);
 

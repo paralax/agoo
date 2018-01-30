@@ -3,7 +3,6 @@
 #ifndef __AGOO_LOG_H__
 #define __AGOO_LOG_H__
 
-#include <netdb.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdbool.h>
