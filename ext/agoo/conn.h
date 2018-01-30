@@ -3,7 +3,9 @@
 #ifndef __AGOO_CON_H__
 #define __AGOO_CON_H__
 
+#ifndef IS_WINDOWS
 #include <poll.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 
