@@ -51,7 +51,9 @@ static const char	level_chars[] = { 'F', 'E', 'W', 'I', 'D', '?' };
 static Color
 find_color(const char *name) {
     if (NULL != name) {
-	for (Color c = colors; NULL != c->name; c++) {
+	Color	c;
+	
+	for (c = colors; NULL != c->name; c++) {
 	    if (0 == strcasecmp(c->name, name)) {
 		return c;
 	    }
