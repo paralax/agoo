@@ -4,7 +4,7 @@
 
 #include "con.h"
 #include "error_stream.h"
-#include "request.h"
+//#include "request.h"
 
 static VALUE	req_class = Qundef;
 
