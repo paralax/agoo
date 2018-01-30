@@ -493,8 +493,9 @@ http_cleanup() {
     Slot	*sp = key_cache.buckets;
     Slot	s;
     Slot	n;
+    int		i;
 
-    for (int i = BUCKET_SIZE; 0 < i; i--, sp++) {
+    for (i = BUCKET_SIZE; 0 < i; i--, sp++) {
 	for (s = *sp; NULL != s; s = n) {
 	    n = s->next;
 	    free(s);
