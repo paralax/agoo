@@ -40,6 +40,17 @@ static struct _Mime	mime_map[] = {
 
 static const char	page_fmt[] = "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %ld\r\n\r\n";
 
+#ifdef IS_WINDOWS
+char *stpcpy(char *dest, const char *src) {
+    size_t	cnt = strlen(src);
+    
+    strcpy(dest, src);
+
+    return dest + cnt;
+}
+#endif
+
+
 static uint64_t
 calc_hash(const char *key, int *lenp) {
     int			len = 0;
@@ -82,8 +93,9 @@ cache_destroy(Cache cache) {
     Slot	*sp = cache->buckets;
     Slot	s;
     Slot	n;
+    int		i;
 
-    for (int i = PAGE_BUCKET_SIZE; 0 < i; i--, sp++) {
+    for (i = PAGE_BUCKET_SIZE; 0 < i; i--, sp++) {
 	for (s = *sp; NULL != s; s = n) {
 	    n = s->next;
 	    free(s);

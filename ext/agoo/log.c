@@ -1,6 +1,8 @@
 // Copyright 2018 by Peter Ohler, All Rights Reserved
 
+#ifdef IS_WINDOWS
 #include <ruby.h>
+#endif
 #include <dirent.h>
 #include <stdio.h>
 #include <stdlib.h>
