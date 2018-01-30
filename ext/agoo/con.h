@@ -7,10 +7,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "err.h"
-
 #define MAX_HEADER_SIZE	8192
 
+struct _Err;
 struct _Req;
 struct _Res;
 struct _Server;
@@ -36,7 +35,7 @@ typedef struct _Con {
     struct _Res		*res_tail;
 } *Con;
 
-extern Con		con_create(Err err, struct _Server *server, int sock, uint64_t id);
+extern Con		con_create(struct _Err *err, struct _Server *server, int sock, uint64_t id);
 extern void		con_destroy(Con c);
 extern const char*	con_header_value(const char *header, int hlen, const char *key, int *vlen);
 
