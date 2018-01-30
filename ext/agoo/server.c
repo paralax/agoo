@@ -21,7 +21,7 @@
 #include <ruby.h>
 #include <ruby/thread.h>
 
-#include "con.h"
+//#include "con.h"
 #include "dtime.h"
 #include "err.h"
 #include "http.h"
