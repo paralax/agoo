@@ -6,8 +6,8 @@
 #ifndef IS_WINDOWS
 #include <netdb.h>
 #include <netinet/tcp.h>
-#endif
 #include <poll.h>
+#endif
 #include <signal.h>
 #include <stdarg.h>
 #include <stdio.h>
