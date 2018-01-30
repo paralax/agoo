@@ -8,7 +8,6 @@
 #include <stdint.h>
 
 #include "err.h"
-#include "response.h"
 #include "server.h"
 
 #define MAX_HEADER_SIZE	8192

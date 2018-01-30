@@ -23,6 +23,7 @@
 #include "dtime.h"
 #include "err.h"
 #include "http.h"
+#include "res.h"
 #include "response.h"
 #include "request.h"
 #include "server.h"
