@@ -4,9 +4,6 @@ version: 3.3.2-{build}-{branch}
 
 image: Visual Studio 2015
 
-cache:
-  - vendor/bundle
-
 platform:
   - x86
 

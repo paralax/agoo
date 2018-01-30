@@ -3,6 +3,8 @@
 #ifndef __AGOO_CON_H__
 #define __AGOO_CON_H__
 
+// The name of the file is conn.h instead of con.h since windows sees to
+// reserve that file name and hangs the compile if the file is named con.h.
 #ifndef IS_WINDOWS
 #include <poll.h>
 #endif
