@@ -582,7 +582,9 @@ start(VALUE self) {
     }
     signal(SIGINT, sig_handler);
     signal(SIGTERM, sig_handler);
+#ifndef IS_WINDOWS
     signal(SIGPIPE, SIG_IGN);
+#endif
 
     if (0 >= server->thread_cnt) {
 	Req		req;
