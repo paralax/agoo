@@ -11,6 +11,10 @@
 #include "dtime.h"
 #include "log.h"
 
+#ifdef IS_WINDOWS
+#define timegm _mkgmtime
+#endif
+
 // lower gives faster response but burns more CPU. This is a reasonable compromise.
 #define RETRY_SECS	0.0001
 #define NOT_WAITING	0
@@ -356,7 +360,11 @@ log_init(Err err, Log log, VALUE cfg) {
 	return err->code;
     }
     if ('\0' != *log->dir) {
+#ifdef IS_WINDOWS
+	if (0 != mkdir(log->dir) && EEXIST != errno) {
+#else
 	if (0 != mkdir(log->dir, 0770) && EEXIST != errno) {
+#endif
 	    return err_no(err, "Failed to create '%s'.", log->dir);
 	}
 	if (ERR_OK != open_log_file(err, log)) {
