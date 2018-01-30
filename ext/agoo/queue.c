@@ -3,7 +3,9 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#ifndef IS_WINDOWS
 #include <sys/socket.h>
+#endif
 #include <unistd.h>
 
 #include "dtime.h"
@@ -191,4 +193,3 @@ queue_count(Queue q) {
     
     return ((QItem*)atomic_load(&q->tail) - (QItem*)atomic_load(&q->head) + size) % size;
 }
-
