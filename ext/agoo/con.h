@@ -14,6 +14,7 @@
 #define MAX_HEADER_SIZE	8192
 
 struct _Req;
+struct _Res;
 
 typedef struct _Con {
     int			sock;
@@ -32,10 +33,8 @@ typedef struct _Con {
     double		timeout;
     bool		closing;
     struct _Req		*req;
-    Res			res_head;
-    Res			res_tail;
-
-    //FEval		eval;
+    struct _Res		*res_head;
+    struct _Res		*res_tail;
 } *Con;
 
 extern Con		con_create(Err err, Server server, int sock, uint64_t id);

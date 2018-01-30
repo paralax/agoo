@@ -11,6 +11,7 @@
 #include "hook.h"
 #include "http.h"
 #include "res.h"
+#include "request.h"
 #include "server.h"
 
 #define MAX_SOCK	4096
