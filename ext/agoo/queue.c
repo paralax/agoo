@@ -103,6 +103,7 @@ queue_pop(Queue q, double timeout) {
     QItem	item;
     QItem	*head;
     QItem	*next;
+    int		cnt;
     
     if (q->multi_pop) {
 	while (atomic_flag_test_and_set(&q->pop_lock)) {
@@ -125,7 +126,7 @@ queue_pop(Queue q, double timeout) {
 	next = q->q;
     }
     // If the next is the tail then wait for something to be appended.
-    for (int cnt = (int)(timeout / RETRY_SECS); atomic_load(&q->tail) == next; cnt--) {
+    for (cnt = (int)(timeout / RETRY_SECS); atomic_load(&q->tail) == next; cnt--) {
 	if (cnt <= 0) {
 	    if (q->multi_pop) {
 		atomic_flag_clear(&q->pop_lock);
@@ -162,6 +163,9 @@ queue_empty(Queue q) {
 
 int
 queue_listen(Queue q) {
+#ifdef IS_WINDOWS
+    return 0;
+#else
     if (0 == q->rsock) {
 	int	fd[2];
 
@@ -175,6 +179,7 @@ queue_listen(Queue q) {
     atomic_store(&q->wait_state, WAITING);
     
     return q->rsock;
+#endif
 }
 
 void

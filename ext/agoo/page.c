@@ -41,6 +41,9 @@ static struct _Mime	mime_map[] = {
 static const char	page_fmt[] = "HTTP/1.1 200 OK\r\nContent-Type: %s\r\nContent-Length: %ld\r\n\r\n";
 
 #ifdef IS_WINDOWS
+
+#define S_ISLNK(x) false
+
 char *stpcpy(char *dest, const char *src) {
     size_t	cnt = strlen(src);
     
